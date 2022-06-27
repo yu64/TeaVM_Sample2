@@ -1,0 +1,64 @@
+
+plugins {
+	
+	
+	//TeaVM
+	id 'io.github.zebalu.teavm-gradle-plugin' version '1.0.0'
+	
+}
+
+eclipse.project.name = "teavm"
+
+ext {
+
+	teavmOutputPackage = "test/resources/";
+	teavmOutput = "${project.buildDir}/resources/main";
+}
+
+configurations {
+
+	//TeaVMの生成物が含まれたJarの構成設定をする。
+	//依存関係は、推移しない。
+    teavmJar {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+}
+
+dependencies {
+
+	implementation 'org.teavm:teavm-jso-apis:0.7.0'
+}
+
+
+
+//TeaVMの生成物が含まれたJarを作成するタスク
+task createTeavmJar(type: Jar, dependsOn: processResources) {
+
+	classifier "resources"
+	from fileTree("${project.buildDir}/resources/main/")
+}
+
+//成果物を設定
+artifacts {
+
+	//構成と生成タスクを紐づける
+	teavmJar createTeavmJar
+}
+
+//ビルドしたときに生成されるように登録
+assemble.dependsOn createTeavmJar
+
+
+
+//TeaVMの設定
+teavm {
+
+	targetDirectory = new File("${teavmOutput}/${teavmOutputPackage}");
+	mainClass = "test.teavm.Main";
+	entryPointName = "callTeavmScript";
+	targetFileName = "app.js"
+}
+
+//リソースを確定させる前に、TeaVMでリソースを生成させる
+processResources.dependsOn 'teavmc'

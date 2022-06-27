@@ -1,0 +1,137 @@
+
+
+
+//このプロジェクトのGradleプラグインの指定
+plugins {
+
+	//fat-jar作成プラグイン
+	//id 'com.github.johnrengelman.shadow' version '5.0.0'
+	
+}
+
+
+
+//すべてのプロジェクトの設定
+allprojects {
+
+    apply plugin: "eclipse"
+    
+    eclipse.classpath {
+        
+        
+        downloadJavadoc = true
+        downloadSources = true
+        defaultOutputDir = file('build/eclipse')
+    }
+    
+    repositories {
+
+        google()
+        mavenCentral()
+        jcenter()
+        maven
+        {
+            url "https://jitpack.io"
+        }
+    }
+
+    dependencies {
+
+        //implementation "AAAA:BBBB:VVVV"
+        //implementation fileTree(dir: 'lib', include: ["*"]);
+        //[newsourceset]Implementation ""
+    }
+    
+    
+	tasks.withType(JavaCompile) {
+	
+	    options.encoding = "UTF-8";
+	}
+
+}
+
+//サブプロジェクトの設定
+subprojects {
+
+    apply plugin: "java-library"
+    
+    //javaの設定
+	java {
+
+	    toolchain {
+	        //Javaのバージョンを指定
+	        languageVersion = JavaLanguageVersion.of(11)
+	    }
+	}
+}
+
+
+
+
+ext.printObjectInfo = {obj ->
+
+    println('==========Info Start==========');
+        
+    println("=====Method=====");
+    obj.metaClass.getMetaMethods().forEach({o -> println(o.getSignature())});
+    println("=====Property=====");
+    obj.metaClass.getProperties().forEach({o ->
+
+        print(String.format("(%s) %s", o.getType(), o.getName()));
+        if(obj instanceof Class)
+        {
+            println();
+            return;
+        }
+
+        def value = null;
+        try
+        {
+            value = o.getProperty(obj);
+            println(String.format("   =   (%s) %s", value?.class, value));
+        }
+        catch(Exception e)
+        {
+            println(" = [N/A]");
+        }
+    })
+
+    println("=====Object=====");
+    println(obj.class);
+    println(obj);
+    println('==========Info End==========');
+
+}
+
+
+
+//タスクを作成
+//とある値の情報を表示する
+task printTest {
+
+    //タスクの処理ではなく、設定を記述する
+
+    //最後の処理を設定
+    doLast {
+
+        rootProject.printObjectInfo(this);
+    }
+}
+
+gradle.taskGraph.whenReady {taskGraph ->
+    println "Found task graph: " + taskGraph
+    println "Found " + taskGraph.allTasks.size() + " tasks."
+    taskGraph.allTasks.forEach { task ->
+        println task
+        task.dependsOn.forEach { dep ->
+            println "  -dep   " + dep
+        }
+        
+        task.mustRunAfter.each { dep -> 
+            println "  -after " + dep
+        }
+    }
+}
+
+
+

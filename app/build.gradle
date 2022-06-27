@@ -1,0 +1,60 @@
+
+
+plugins {
+	
+	id "application"
+	id 'com.github.johnrengelman.shadow' version '5.0.0'
+}
+
+eclipse.project.name = "app"
+
+application {
+
+	mainClassName = "test.Main"
+}
+
+ext {
+
+}
+
+configurations {
+
+}
+
+
+dependencies {
+
+	//TeaVMの生成物を含むJarを使用する。
+	implementation project(path: ":teavm", configuration: 'teavmJar')
+
+	implementation 'io.github.classgraph:classgraph:4.8.147'
+	implementation 'com.github.pcdv.flak:flak-api:2.1.0'
+	implementation 'com.github.pcdv.flak:flak-backend-jdk:2.1.0'
+	
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+}
+
+
+// import org.gradle.plugins.ide.eclipse.model.internal.FileReferenceFactory
+// import org.gradle.plugins.ide.eclipse.model.Library
+
+eclipse.classpath.file {
+
+	whenMerged {classpath ->
+
+		//teavmプロジェクトを元に、オートコンプリートさせないため、削除する。
+		//クラスファイルを使用しないため、問題ないはず。
+		classpath.entries.removeAll {entry -> entry.kind == 'src' && entry.path == '/teavm'}
+
+		//TeaVMの生成物を含むJarをクラスパスに追加する。
+		// def factory = new FileReferenceFactory();
+		// def fileSet = project(":teavm").configurations.teavmJar.artifacts.getFiles();
+		// for(File f : fileSet)
+		// {
+		// 	def ref = factory.fromPath(f.getAbsolutePath());
+		// 	classpath.entries.add(new Library(ref));
+		// }
+	}
+}
+
+

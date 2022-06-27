@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "app"
+		},
+		{
+			"path": "teavm"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "automatic"
+	}
+}
