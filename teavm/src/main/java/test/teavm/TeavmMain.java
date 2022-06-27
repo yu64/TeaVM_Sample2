@@ -6,7 +6,7 @@ import org.teavm.jso.dom.html.HTMLBodyElement;
 import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.html.HTMLElement;
 
-public class Main {
+public class TeavmMain {
 
 	public static void main(String[] args) throws Exception
 	{

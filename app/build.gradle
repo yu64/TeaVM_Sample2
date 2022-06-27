@@ -4,6 +4,7 @@ plugins {
 	
 	id "application"
 	id 'com.github.johnrengelman.shadow' version '5.0.0'
+	id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 eclipse.project.name = "app"
@@ -31,7 +32,14 @@ dependencies {
 	implementation 'com.github.pcdv.flak:flak-api:2.1.0'
 	implementation 'com.github.pcdv.flak:flak-backend-jdk:2.1.0'
 	
+
+
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+}
+
+javafx {
+    version = '11.0.2'
+    modules = [ 'javafx.web' ]
 }
 
 

@@ -55,7 +55,7 @@ assemble.dependsOn createTeavmJar
 teavm {
 
 	targetDirectory = new File("${teavmOutput}/${teavmOutputPackage}");
-	mainClass = "test.teavm.Main";
+	mainClass = "test.teavm.TeavmMain";
 	entryPointName = "callTeavmScript";
 	targetFileName = "app.js"
 }
