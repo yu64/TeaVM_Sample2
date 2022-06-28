@@ -1,0 +1,14 @@
+
+
+
+body {
+
+    display: flex;
+    flex-flow: column;
+}
+
+main {
+
+    display: flex;
+    flex-flow: row;
+}

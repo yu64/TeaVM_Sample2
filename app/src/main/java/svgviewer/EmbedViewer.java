@@ -1,10 +1,8 @@
-package test;
+package svgviewer;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -37,7 +35,7 @@ public class EmbedViewer extends Application{
         Scene scene = new Scene(pane, 500, 500);
 
         stage.setScene(scene);
-        stage.setMaximized(true);
+        stage.setMaximized(false);
         stage.show();
     }
 

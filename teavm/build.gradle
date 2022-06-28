@@ -11,7 +11,7 @@ eclipse.project.name = "teavm"
 
 ext {
 
-	teavmOutputPackage = "test/resources/";
+	teavmOutputPackage = "svgviewer/resources/";
 	teavmOutput = "${project.buildDir}/resources/main";
 }
 
@@ -55,7 +55,7 @@ assemble.dependsOn createTeavmJar
 teavm {
 
 	targetDirectory = new File("${teavmOutput}/${teavmOutputPackage}");
-	mainClass = "test.teavm.TeavmMain";
+	mainClass = "svgviewer.teavm.TeavmMain";
 	entryPointName = "callTeavmScript";
 	targetFileName = "app.js"
 }

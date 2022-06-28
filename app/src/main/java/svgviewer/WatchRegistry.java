@@ -1,4 +1,4 @@
-package test;
+package svgviewer;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
