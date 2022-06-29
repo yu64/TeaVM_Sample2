@@ -28,14 +28,14 @@ dependencies {
 	//TeaVMの生成物を含むJarを使用する。
 	implementation project(path: ":teavm", configuration: 'teavmJar')
 
-	implementation 'io.github.classgraph:classgraph:4.8.147'
+	
 	implementation 'com.github.pcdv.flak:flak-api:2.1.0'
 	implementation 'com.github.pcdv.flak:flak-backend-jdk:2.1.0'
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
+	//implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
 
 	implementation 'org.thymeleaf:thymeleaf:3.1.0.M2'
 
-
+	//testimplementation 'io.github.classgraph:classgraph:4.8.147'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
 }
 

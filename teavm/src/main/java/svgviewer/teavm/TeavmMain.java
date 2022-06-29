@@ -1,21 +1,12 @@
 package svgviewer.teavm;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.teavm.interop.Async;
-import org.teavm.interop.AsyncCallback;
-import org.teavm.jso.JSBody;
 import org.teavm.jso.ajax.XMLHttpRequest;
 import org.teavm.jso.browser.History;
 import org.teavm.jso.browser.Window;
-import org.teavm.jso.core.JSFunction;
 import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.html.HTMLElement;

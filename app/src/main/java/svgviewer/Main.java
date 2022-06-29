@@ -13,7 +13,7 @@ public class Main {
 
 	public static void main(String[] args) throws Exception
 	{
-		Path storage = Path.of((args.length == 0 ? "./storage" : args[1]));
+		Path storage = Path.of((args.length == 0 ? "./storage" : args[0]));
 		Files.createDirectories(storage);
 
 		AppFactory factory = Flak.getFactory();
