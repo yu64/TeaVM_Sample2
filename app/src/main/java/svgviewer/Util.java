@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,24 @@ public class Util {
     public static <O> O checkNull(O nullable, O alt)
     {
         return (nullable == null ? alt : nullable);
+    }
+
+    public static int updateCount(boolean canAdd, int now, int min, int max)
+    {
+        return Util.updateCount(canAdd, now, min, max, true);
+    }
+
+    public static int updateCount(boolean canAdd, int now, int min, int max, boolean canLoop)
+    {
+        //L < x < R
+        int leftEnd = (canLoop ? max : min);
+        int rightEnd = (canLoop ? min : max);
+
+        now += (canAdd ? 1 : -1);
+        now = (min > now ? leftEnd : now);
+        now = (now > max ? rightEnd : now);
+
+        return now;
     }
 
 }

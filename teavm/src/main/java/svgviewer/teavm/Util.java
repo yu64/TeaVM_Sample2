@@ -1,5 +1,9 @@
 package svgviewer.teavm;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,5 +23,11 @@ public class Util {
         }
 
         return out;
+    }
+
+    public static BufferedReader toBufferedReader(InputStream is)
+    {
+        InputStreamReader isr = new InputStreamReader(is);
+        return new BufferedReader(isr);
     }
 }

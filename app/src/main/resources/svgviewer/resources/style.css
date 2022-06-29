@@ -5,10 +5,67 @@ body {
 
     display: flex;
     flex-flow: column;
+    
+    margin: 0px;
+    height: 100vh;
+}
+
+header {
+
+    min-height: 0px;
+    height: 0px;
 }
 
 main {
 
+    flex-grow: 1;
+
     display: flex;
     flex-flow: row;
+
+    width: 100vw;
+    height: 100%;
+    background-color: black;
+}
+
+footer {
+
+    min-height: 0px;
+    height: 0px;
+}
+
+#left {
+
+    min-width: 50px;
+    background-color: lightgray;
+}
+
+#right {
+
+    min-width: 50px;
+    background-color: lightgray;
+}
+
+#center {
+
+    flex-grow: 1;
+
+    
+    display: flex;
+	justify-content: center;
+	align-items: center;
+    
+}
+
+#center > div{
+
+    width: 80%;
+    height: 80%;
+}
+
+#center > div > img {
+
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }

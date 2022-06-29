@@ -37,27 +37,56 @@ public class ContentObserver {
         return this.storage;
     }
 
+   
     public Set<Path> getFiles()
     {
-        this.update();
+        return this.getFiles(true);
+    }
+
+    public Set<Path> getFiles(boolean canUpdate)
+    {
+        if(canUpdate)
+        {
+            this.update();
+        }
+
         return Collections.unmodifiableSet(new HashSet<>(this.contents));
     }
 
     public Path getHeadFile()
     {
-        this.update();
+        return this.getHeadFile(true);
+    }
+
+    public Path getHeadFile(boolean canUpdate)
+    {
+        if(canUpdate)
+        {
+            this.update();
+        }
+
         return this.contents.iterator().next();
     }
 
     public boolean isEmpty()
     {
-        this.update();
+        return this.isEmpty(true);
+    }
+
+    public boolean isEmpty(boolean canUpdate)
+    {
+        if(canUpdate)
+        {
+            this.update();
+        }
+
         return this.contents.isEmpty();
     }
 
 
-    public void update()
+    public boolean update()
     {
+        boolean out = false;
         WatchKey key;
         while( (key = this.wr.poll()) != null)
         {
@@ -72,17 +101,22 @@ public class ContentObserver {
                 if(e.kind() == StandardWatchEventKinds.ENTRY_CREATE)
                 {
                     this.contents.add(path);
+                    out = true;
                 }
                 else if(e.kind() == StandardWatchEventKinds.ENTRY_MODIFY)
                 {
                     this.contents.add(path);
+                    out = true;
                 }
                 else if(e.kind() == StandardWatchEventKinds.ENTRY_DELETE)
                 {
                     this.contents.remove(path);
+                    out = true;
                 }
             }
 
         }
+
+        return out;
     }
 }

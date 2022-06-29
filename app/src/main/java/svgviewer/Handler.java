@@ -13,9 +13,6 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import flak.Query;
 import flak.Request;
 import flak.annotations.Route;
@@ -94,18 +91,27 @@ public class Handler {
     }
 
     @Route("/next")
-    public String handleNext(Query q)
+    public String handleNext(Request req)
+    {
+        req.getResponse().addHeader("Content-Type", "text/plain");
+        return this.getOneSidePath(true, req.getQuery().get("path"));
+    }
+
+    @Route("/prev")
+    public String handlePrev(Request req)
+    {
+        req.getResponse().addHeader("Content-Type", "text/plain");
+        return this.getOneSidePath(false, req.getQuery().get("path"));
+    }
+
+    public String getOneSidePath(boolean rightElseLeft, String path)
     {
         if(this.resources.isEmpty())
         {
             return null;
         }
 
-        String path = q.get("path");
-        if(path == null)
-        {
-            path = this.resources.getHeadFile().toString();
-        }
+        path = Util.checkNull(path, this.resources.getHeadFile().toString());
 
         List<String> paths = this.resources.getFiles().stream()
             .map(Path::toString)
@@ -121,9 +127,12 @@ public class Handler {
             return null;
         }
 
-
-
+        int next = Util.updateCount(rightElseLeft, index, 0, paths.size() - 1);
+        String nextPath = paths.get(next);
+        
+        return nextPath;
     }
+
 
 
     @Route("/stop")
