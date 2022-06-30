@@ -1,5 +1,20 @@
 
+:root {
 
+    --arrowAreaWidth: 50px;
+    --arrowAreaColor: rgba(200, 200, 200, 0.75);
+    --arrowAreaSelectedColor: rgba(200, 200, 200, 0.5);
+    --arrowColor: rgb(255, 255, 255);
+    --imageSize: 80%;
+}
+
+/*=======================================================================*/
+
+html {
+
+    width: 100%;
+    height: 100%;
+}
 
 body {
 
@@ -7,13 +22,18 @@ body {
     flex-flow: column;
     
     margin: 0px;
-    height: 100vh;
+    height: 100%;
+    
 }
 
 header {
 
-    min-height: 0px;
-    height: 0px;
+    /* height: 0px; */
+
+    z-index: 30;
+    
+    background-color: white;
+    border-bottom: 1px solid black;
 }
 
 main {
@@ -23,50 +43,129 @@ main {
     display: flex;
     flex-flow: row;
 
-    width: 100vw;
-    height: 100%;
-    background-color: black;
+    position: relative;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    background-color: rgb(0, 0, 0);
 }
 
 footer {
 
-    min-height: 0px;
     height: 0px;
+
+    z-index: 30;
+
+    background-color: white;
+    border-top: 1px solid black;
 }
 
-#left {
+/*=======================================================================*/
 
-    min-width: 50px;
-    background-color: lightgray;
+#control {
+
+    display: flex;
+    flex-flow: row;
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    width: 100%;
+    height: 100%;
 }
 
-#right {
-
-    min-width: 50px;
-    background-color: lightgray;
-}
 
 #center {
 
     flex-grow: 1;
+}
 
-    
+#left,#right {
+
+    /*内側の要素を中央揃え*/
     display: flex;
 	justify-content: center;
 	align-items: center;
+
+    width: var(--arrowAreaWidth);
+    height: 100%;
     
+    z-index: 20;
+
+    background-color: var(--arrowAreaColor);
+
+    transition: all 300ms 0s ease;
 }
 
-#center > div{
+#left:hover,#right:hover {
 
-    width: 80%;
-    height: 80%;
-    user-select: none;
+    background-color: var(--arrowAreaSelectedColor);
 }
 
-#center > div > img {
+/*=======================================================================*/
+
+#left_arrow,#right_arrow {
+    
+    /*サイズを決定*/
+    width: 10px;
+    height: 10px;
+
+    /*サイズの上と右に線を描画*/
+    border-top: 3px solid var(--arrowColor);
+    border-right: 3px solid var(--arrowColor);
+
+    transition: all 300ms 0s ease;
+}
+
+#left_arrow {
+
+    /*全体を傾ける*/
+    transform: rotate(225deg);
+}
+
+#right_arrow {
+
+    /*全体を傾ける*/
+    transform: rotate(45deg);
+}
+
+#left:hover #left_arrow {
+
+    margin-right: 10px;
+}
+
+#right:hover #right_arrow {
+
+    margin-left: 10px;
+}
+
+/*=======================================================================*/
+
+#viewer {
+
+    /*内側の要素を中央揃え*/
+    display: flex;
+	justify-content: center;
+	align-items: center;
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
 
     width: 100%;
     height: 100%;
+
+    
+    z-index: 10;
+}
+
+#viewer > img {
+
+    width: var(--imageSize);
+    height: var(--imageSize);
+    user-select: none;
     object-fit: contain;
 }

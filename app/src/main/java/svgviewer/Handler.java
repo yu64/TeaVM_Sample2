@@ -24,9 +24,10 @@ public class Handler {
     private ContentObserver resources;
     private TemplateEngine engine;
 
-    public Handler(ContentObserver resources)
+    public Handler(Path storage) throws IOException
     {
-        this.resources = resources;
+        this.resources = new ContentObserver(storage);
+
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setPrefix(this.RESOURCES_CURRENT + "/");
         resolver.setSuffix("");
@@ -47,6 +48,7 @@ public class Handler {
 	public String handleIndex()
 	{
         Context context = new Context();
+        context.setVariable("pathTitle", this.resources.getHeadFile().toString());
         return this.engine.process("index.html", context);
     }
 
@@ -133,7 +135,37 @@ public class Handler {
         return nextPath;
     }
 
+    @Route("/open")
+    public String open(Request req)
+    {
+        Query q = req.getQuery();
+        String pathText = q.get("storage");
+        if(pathText == null)
+        {
+            req.getResponse().setStatus(400);
+            return "[ERROR] use query param 'storage=<TargetDirPath>'";
+        }
 
+        Path path = Path.of(pathText);
+        if(!Files.exists(path))
+        {
+            req.getResponse().setStatus(400);
+            return "[ERROR] not found '" + pathText + "'";
+        }
+
+        this.resources.close();
+        try
+        {
+            this.resources = new ContentObserver(path);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        req.getResponse().redirect("/index.html");
+        return null;
+    }
 
     @Route("/stop")
 	public void stop()

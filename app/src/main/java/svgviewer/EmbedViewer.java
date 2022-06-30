@@ -32,7 +32,7 @@ public class EmbedViewer extends Application{
         webEngine.load(this.url);
 
         BorderPane pane = new BorderPane(this.webView);
-        Scene scene = new Scene(pane, 500, 500);
+        Scene scene = new Scene(pane, 700, 500);
 
         stage.setScene(scene);
         stage.setMaximized(false);

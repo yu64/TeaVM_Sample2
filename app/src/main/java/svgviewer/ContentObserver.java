@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-public class ContentObserver {
+public class ContentObserver implements AutoCloseable{
     
     private Path storage;
     private WatchRegistry wr = new WatchRegistry();
@@ -50,7 +50,7 @@ public class ContentObserver {
             this.update();
         }
 
-        return Collections.unmodifiableSet(new HashSet<>(this.contents));
+        return new TreeSet<>(this.contents);
     }
 
     public Path getHeadFile()
@@ -118,5 +118,11 @@ public class ContentObserver {
         }
 
         return out;
+    }
+
+    @Override
+    public void close()
+    {
+        this.wr.close();
     }
 }

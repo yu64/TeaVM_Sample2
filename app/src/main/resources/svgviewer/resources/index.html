@@ -10,20 +10,25 @@
     </head>
     <body>
         <header>
-
+            <span id="pathTitle" th:text="${pathTitle}"></span>
         </header>
         <main>
-            <div id="left">
-                
-            </div>
-            <div id="center">
-                <div>
-                    <img id="viewer" src="/storage">
+            <div id="control">
+                <div id="left">
+                    <span id="left_arrow"></span>
+                </div>
+                <div id="center">
+                </div>
+                <div id="right">
+                    <span id="right_arrow"></span>
                 </div>
             </div>
-            <div id="right">
-                
+            
+            <div id="viewer">
+                <img src="/storage" draggable="false">
             </div>
+            
+
         </main>
         <footer>
 

@@ -20,7 +20,7 @@ public class Main {
 		factory.setPort(Util.getAnyPort());
 
 		App app = factory.createApp();
-		app.scan(new Handler(new ContentObserver(storage)));
+		app.scan(new Handler(storage));
 		app.start();
 
 		System.out.println(app.getRootUrl());
