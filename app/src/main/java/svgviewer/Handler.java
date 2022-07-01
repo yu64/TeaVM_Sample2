@@ -1,11 +1,20 @@
 package svgviewer;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Base64.Encoder;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -23,6 +32,8 @@ public class Handler {
 
     private ContentObserver resources;
     private TemplateEngine engine;
+
+    private TimeoutTimer timeout = new TimeoutTimer(1000 * 3);
 
     public Handler(Path storage) throws IOException
     {
@@ -117,6 +128,7 @@ public class Handler {
 
         List<String> paths = this.resources.getFiles().stream()
             .map(Path::toString)
+            .sorted()
             .collect(Collectors.toList());
 
         Map<String, Integer> numbers = IntStream.range(0, paths.size())
@@ -126,13 +138,22 @@ public class Handler {
         Integer index = numbers.get(path);
         if(index == null)
         {
-            return null;
+            return this.resources.getHeadFile().toString();
         }
 
         int next = Util.updateCount(rightElseLeft, index, 0, paths.size() - 1);
         String nextPath = paths.get(next);
         
         return nextPath;
+    }
+
+    @Route("/all")
+    public String all(Request req)
+    {
+        return this.resources.getFiles().stream()
+            .map(Path::toString)
+            .sorted()
+            .collect(Collectors.joining(","));
     }
 
     @Route("/open")
@@ -143,14 +164,14 @@ public class Handler {
         if(pathText == null)
         {
             req.getResponse().setStatus(400);
-            return "[ERROR] use query param 'storage=<TargetDirPath>'";
+            return "[ERROR] use query param 'storage=<TargetDirPath>'.";
         }
 
         Path path = Path.of(pathText);
         if(!Files.exists(path))
         {
             req.getResponse().setStatus(400);
-            return "[ERROR] not found '" + pathText + "'";
+            return "[ERROR] not found '" + pathText + "'.";
         }
 
         this.resources.close();
@@ -167,9 +188,65 @@ public class Handler {
         return null;
     }
 
+    @Route("/keep_alive")
+    public String updateTimeout(Request req) throws NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        this.timeout.reset();
+        return "Timeout extension.";
+    }
+
     @Route("/stop")
 	public void stop()
 	{
         System.exit(0);
+    }
+
+
+// ================================================================================
+ 
+
+    private static class TimeoutTimer {
+
+        private Timer timer = null;
+        private int timeout;
+
+        public TimeoutTimer(int timeout)
+        {
+            this.timeout = timeout;
+        }
+
+        public void reset()
+        {
+            if(this.timer != null)
+            {
+                this.timer.cancel();
+                this.timer.purge();
+            }
+
+            Timer timer = new Timer();
+            timer.schedule(new RunnableTask(() -> {
+
+                System.out.println("Timeout");
+                System.exit(0);
+            }), this.timeout);
+            
+            this.timer = timer;
+        }
+    }
+
+    private static class RunnableTask extends TimerTask {
+
+        private Runnable task;
+        public RunnableTask(Runnable task)
+        {
+            this.task = task;
+        }
+
+        @Override
+        public void run()
+        {
+            task.run();
+        }
+
     }
 }

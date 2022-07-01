@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -54,6 +55,12 @@ public class Util {
         return bis;
     }
 
+    public static BufferedReader toBufferedReader(InputStream is)
+    {
+        InputStreamReader isr = new InputStreamReader(is);
+        return new BufferedReader(isr);
+    }
+
     public static <O, I> O convart(I value, Function<I, O> fun, O alt)
     {
         if(value == null)
@@ -91,6 +98,15 @@ public class Util {
         now = (now > max ? rightEnd : now);
 
         return now;
+    }
+
+    //大文字小文字を区別しないで、等しいか
+    public static boolean equalsNoLetterCase(String s1, String s2)
+    {
+        s1 = (s1 == null ? null : s1.toLowerCase());
+        s2 = (s2 == null ? null : s2.toLowerCase());
+        
+        return Objects.equals(s1, s2);
     }
 
 }

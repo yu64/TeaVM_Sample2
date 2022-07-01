@@ -6,11 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class ContentObserver implements AutoCloseable{
@@ -18,7 +15,7 @@ public class ContentObserver implements AutoCloseable{
     private Path storage;
     private WatchRegistry wr = new WatchRegistry();
 
-    private Set<Path> contents = new TreeSet<>(Comparator.comparing(p -> p.toString()));
+    private Set<Path> contents = new HashSet<>();
 
     public ContentObserver(Path storage) throws IOException
     {
@@ -50,7 +47,7 @@ public class ContentObserver implements AutoCloseable{
             this.update();
         }
 
-        return new TreeSet<>(this.contents);
+        return new HashSet<>(this.contents);
     }
 
     public Path getHeadFile()
@@ -100,17 +97,17 @@ public class ContentObserver implements AutoCloseable{
                 System.out.println(path);
                 if(e.kind() == StandardWatchEventKinds.ENTRY_CREATE)
                 {
-                    this.contents.add(path);
+                    this.add(path);
                     out = true;
                 }
                 else if(e.kind() == StandardWatchEventKinds.ENTRY_MODIFY)
                 {
-                    this.contents.add(path);
+                    this.add(path);
                     out = true;
                 }
                 else if(e.kind() == StandardWatchEventKinds.ENTRY_DELETE)
                 {
-                    this.contents.remove(path);
+                    this.remove(path);
                     out = true;
                 }
             }
@@ -118,6 +115,16 @@ public class ContentObserver implements AutoCloseable{
         }
 
         return out;
+    }
+
+    private void add(Path path)
+    {
+        this.contents.add(path);
+    }
+
+    private void remove(Path path)
+    {
+        this.contents.remove(path);
     }
 
     @Override

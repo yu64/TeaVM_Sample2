@@ -26,8 +26,6 @@ public class Main {
 		System.out.println(app.getRootUrl());
 
 		Desktop.getDesktop().browse(new URI(app.getRootUrl()));
-		EmbedViewer.open(app.getRootUrl());
-		
 	}
 
 }
