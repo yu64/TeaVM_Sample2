@@ -62,6 +62,11 @@ public class ContentObserver implements AutoCloseable{
             this.update();
         }
 
+        if(this.contents.isEmpty())
+        {
+            return null;
+        }
+
         return this.contents.iterator().next();
     }
 
@@ -93,8 +98,11 @@ public class ContentObserver implements AutoCloseable{
             {
                 Path path = dir.resolve((Path)e.context());
                 path = this.storage.relativize(path);
-
                 System.out.println(path);
+
+                
+
+
                 if(e.kind() == StandardWatchEventKinds.ENTRY_CREATE)
                 {
                     this.add(path);

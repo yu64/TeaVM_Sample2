@@ -38,6 +38,10 @@ public class Handler {
     public Handler(Path storage) throws IOException
     {
         this.resources = new ContentObserver(storage);
+        if(this.resources.isEmpty())
+        {
+            throw new RuntimeException("[ERROR] Empty dir: '" + storage + "'.");
+        }
 
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setPrefix(this.RESOURCES_CURRENT + "/");
