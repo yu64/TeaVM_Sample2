@@ -13,7 +13,6 @@ import org.teavm.jso.dom.events.MouseEvent;
 import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.html.HTMLElement;
 import org.teavm.jso.dom.html.HTMLImageElement;
-import org.w3c.dom.css.CSSStyleSheet;
 
 public class TeavmMain {
 
@@ -54,7 +53,14 @@ public class TeavmMain {
 		TeavmMain.nowPath = query.get("path");
 		TeavmMain.applyPath(TeavmMain.nowPath);
 
-		//パス移動
+		//定期的に生存報告(WebSokectを使いたかった)
+		Window.setInterval(() -> {
+
+			TeavmMain.fetch("/keep_alive", res -> System.out.println(res.getResponseText()));
+		}, 1000);
+
+
+		//移動
 		TeavmMain.LEFT.addEventListener("click", TeavmMain::next);
 		TeavmMain.RIGHT.addEventListener("click", TeavmMain::prev);
 
